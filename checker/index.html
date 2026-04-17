@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>فاحص الأسعار - BLACK COFFEE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal','Segoe UI',sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f172a 100%);color:#fff;min-height:100vh;overflow-x:hidden}
+.app-container{max-width:500px;margin:0 auto;padding:15px;min-height:100vh;display:flex;flex-direction:column}
+.app-header{text-align:center;padding:20px 0 15px}
+.app-header h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.app-header .subtitle{font-size:13px;color:#94a3b8}
+.store-name{font-size:16px;color:#10b981;font-weight:600;margin-bottom:8px}
+.scanner-section{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:20px;overflow:hidden;margin-bottom:15px;position:relative}
+.product-overlay{position:absolute;bottom:60px;left:0;right:0;z-index:100;padding:12px 16px;pointer-events:none;transition:opacity 0.4s ease}
+.product-overlay.hidden{opacity:0}.product-overlay.visible{opacity:1}
+.overlay-card{background:rgba(0,0,0,0.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:2px solid rgba(16,185,129,0.5);border-radius:16px;padding:16px 20px;animation:overlaySlideUp 0.35s ease}
+@keyframes overlaySlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.overlay-product-name{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
+.overlay-category{font-size:12px;color:#94a3b8;margin-bottom:10px}
+.overlay-price-row{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#10b981,#059669);border-radius:12px;padding:12px 18px}
+.overlay-price-label{font-size:14px;color:rgba(255,255,255,0.85);font-weight:600}
+.overlay-price-value{font-size:32px;font-weight:800;color:#fff;direction:ltr;text-shadow:0 2px 6px rgba(0,0,0,0.3)}
+.overlay-tax-note{font-size:11px;color:rgba(255,255,255,0.7);text-align:left;margin-top:4px}
+.overlay-scale-info{display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.2);font-size:14px;color:#fff}
+.overlay-scale-total{font-weight:700;font-size:18px}
+.overlay-not-found{background:rgba(0,0,0,0.82);backdrop-filter:blur(10px);border:2px solid rgba(239,68,68,0.5);border-radius:16px;padding:16px 20px;text-align:center;animation:overlaySlideUp 0.35s ease}
+.overlay-not-found i{font-size:36px;color:#ef4444}.overlay-not-found h3{font-size:18px;color:#fff;margin:6px 0 4px}.overlay-not-found p{font-size:13px;color:#94a3b8}
+.scanner-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(16,185,129,0.15);border-bottom:1px solid rgba(255,255,255,0.1)}
+.scanner-header h3{font-size:15px;color:#10b981;display:flex;align-items:center;gap:8px}
+#reader{width:100%;min-height:280px;background:#000}
+#reader video{border-radius:0!important}
+#reader__dashboard_section_swaplink,#reader__filescan_input{display:none!important}
+#reader__dashboard_section_csr span{color:#94a3b8!important;font-size:13px!important}
+#reader__dashboard_section_csr select{background:#1e293b!important;color:#fff!important;border:1px solid #334155!important;border-radius:8px!important;padding:6px 10px!important;margin:5px!important}
+#reader__dashboard_section_csr button,#reader button{background:#10b981!important;color:#fff!important;border:none!important;border-radius:8px!important;padding:8px 16px!important;cursor:pointer!important;font-family:'Tajawal',sans-serif!important;font-weight:600!important;font-size:13px!important}
+#reader img[alt="Info icon"]{display:none!important}
+#reader__scan_region{min-height:250px!important}
+.manual-input{display:flex;gap:8px;padding:12px 16px;background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.08)}
+.manual-input input{flex:1;padding:12px 16px;border:2px solid rgba(255,255,255,0.15);border-radius:12px;background:rgba(255,255,255,0.08);color:#fff;font-size:16px;font-family:'Tajawal',sans-serif;direction:ltr;text-align:center;outline:none;transition:border-color 0.2s}
+.manual-input input::placeholder{color:#64748b}.manual-input input:focus{border-color:#10b981}
+.manual-input button{padding:12px 20px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:12px;font-size:18px;cursor:pointer;transition:transform 0.1s}
+.manual-input button:active{transform:scale(0.95)}
+.sound-toggle{background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;padding:5px}
+.sound-toggle.active{color:#10b981}
+.app-footer{text-align:center;padding:15px 0;color:#475569;font-size:11px;margin-top:auto}
+.product-count{text-align:center;padding:8px;color:#475569;font-size:11px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:400px){.overlay-price-value{font-size:26px}.overlay-product-name{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="app-container">
+<div class="app-header">
+
+<div class="store-name">BLACK COFFEE</div>
+<h1><i class="bi bi-upc-scan"></i> فاحص الأسعار</h1>
+<div class="subtitle">وجّه الكاميرا على الباركود لمعرفة السعر</div>
+</div>
+<div class="scanner-section">
+<div class="scanner-header">
+<h3><i class="bi bi-camera-video"></i> الماسح الضوئي</h3>
+<button class="sound-toggle active" id="soundToggle" onclick="toggleSound()"><i class="bi bi-volume-up-fill"></i></button>
+</div>
+<div id="reader">
+<div id="cameraPrompt" style="padding:40px 20px;text-align:center;">
+<i class="bi bi-camera-video" style="font-size:48px;color:#10b981;display:block;margin-bottom:15px;"></i>
+<p style="color:#94a3b8;margin-bottom:15px;">اضغط لتشغيل الكاميرا</p>
+<button onclick="requestCameraAndStart()" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-family:'Tajawal',sans-serif;font-weight:700;cursor:pointer;"><i class="bi bi-camera-video-fill"></i> تشغيل الكاميرا</button>
+<p id="cameraStatus" style="color:#ef4444;font-size:12px;margin-top:12px;display:none;"></p>
+</div>
+</div>
+<div class="product-overlay hidden" id="productOverlay"></div>
+<div class="manual-input">
+<input type="text" id="manualBarcode" placeholder="أو أدخل الباركود يدوياً..." inputmode="numeric" autocomplete="off" onkeydown="if(event.key==='Enter')lookupManual()">
+<button onclick="lookupManual()"><i class="bi bi-search"></i></button>
+</div>
+</div>
+<div class="product-count" id="productCount"></div>
+<div class="app-footer">BLACK COFFEE &copy; 2026-04-17 20:26</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+(function(){
+'use strict';
+var CURRENCY='$';
+var DECIMALS=2;
+var PRODUCTS=[{"n":"AA","b":"5765766514146","s":"PRD-37422","sb":"","p":11,"pp":11,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"AA اخضر","b":"5765436199094","s":"PRD-44351","sb":"","p":7.5,"pp":7.5,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"B غولد 17","b":"5766081864921","s":"PRD-38914","sb":"","p":11,"pp":11,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"اسيوبي","b":"5765814092558","s":"PRD-46132","sb":"","p":10,"pp":10,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"اسيوبي اخضر","b":"5765024459280","s":"PRD-67651","sb":"","p":7,"pp":7,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"اكسبرس 1","b":"5766426390356","s":"PRD-02868","sb":"","p":12,"pp":12,"t":0,"c":"عام","u":"KG","d":"","i":""},{"n":"اكسبرس 2","b":"5771217088673","s":"PRD-85481","sb":"","p":12,"pp":12,"t":0,"c":"عام","u":"KG","d":"","i":""},{"n":"اكياس اكسبرس","b":"5766484416581","s":"PRD-94089","sb":"","p":0.11,"pp":0.11,"t":0,"c":"عام","u":"حبة","d":"","i":""},{"n":"اندونيسي","b":"5765859152162","s":"PRD-97930","sb":"","p":9,"pp":9,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"اندونيسي اخضر","b":"5765074934743","s":"PRD-77886","sb":"","p":6.2,"pp":6.2,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"اوغندي 15","b":"5765975319936","s":"PRD-82167","sb":"","p":9,"pp":9,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"اوغندي 15 اخضر","b":"5765183473222","s":"PRD-97126","sb":"","p":6.2,"pp":6.2,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"اوغندي 18 اخضر","b":"5765108249600","s":"PRD-83119","sb":"","p":6.4,"pp":6.4,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"اوغندي18","b":"5765912456875","s":"PRD-64573","sb":"","p":10,"pp":10,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"برازيلي 15\/16","b":"5765659077582","s":"PRD-98977","sb":"","p":11,"pp":11,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"برازيلي 17\/18","b":"5765719976357","s":"PRD-64055","sb":"","p":11,"pp":11,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"برازيلي 17\/18 اخضر","b":"5764963253495","s":"PRD-90624","sb":"","p":7.5,"pp":7.5,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"برازيلي صغير 15\/16 اخضر","b":"5764738014417","s":"PRD-08081","sb":"","p":7.25,"pp":7.25,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"برازيلي كسر 15","b":"5895879873255","s":"PRD-75450","sb":"","p":10,"pp":10,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"برازيلي كسر 15 اخضر","b":"5895826092769","s":"PRD-11827","sb":"","p":7.5,"pp":7.5,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"بني","b":"5853237716558","s":"PRD-23743","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"بوليو","b":"5854193571367","s":"PRD-68811","sb":"","p":79,"pp":79,"t":0,"c":"اكسبرس","u":"ص","d":"","i":""},{"n":"دوبل","b":"5853516472526","s":"PRD-13112","sb":"","p":0.85,"pp":0.85,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"شلمونات","b":"5853943704222","s":"PRD-55888","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"طبقات 12","b":"5853995761810","s":"PRD-61510","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"طبقات اسود","b":"5853641877058","s":"PRD-49762","sb":"","p":1,"pp":1,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"طبقات شفاف","b":"5853702552212","s":"PRD-13274","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"طبقات فناجين","b":"5853571145455","s":"PRD-48796","sb":"","p":0.5,"pp":0.5,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"فاكيوم","b":"5766180083590","s":"PRD-30932","sb":"","p":9,"pp":9,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"فاكيوم 400 غ","b":"5846940915681","s":"PRD-32443","sb":"","p":38,"pp":38,"t":0,"c":"معمل","u":"ص","d":"","i":""},{"n":"فتنامي","b":"5765580814997","s":"PRD-84365","sb":"","p":12,"pp":12,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"فتنامي اخضر","b":"5764646102871","s":"PRD-37363","sb":"","p":6.5,"pp":6.5,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"فناجين شفاف","b":"5853073805808","s":"PRD-15184","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"فناجين عادي","b":"5853315248876","s":"PRD-58204","sb":"","p":0.5,"pp":0.5,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"كابتشينو","b":"5854397951417","s":"PRD-97664","sb":"","p":49,"pp":49,"t":0,"c":"اكسبرس","u":"ص","d":"","i":""},{"n":"كبايات 12","b":"5854097227580","s":"PRD-41663","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"كبايات عادي","b":"5853406125242","s":"PRD-55092","sb":"","p":0.85,"pp":0.85,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"كراتين فاكيوم","b":"5847133490905","s":"PRD-71514","sb":"","p":2,"pp":2,"t":0,"c":"عام","u":"ص","d":"","i":""},{"n":"كريستال","b":"5853167845819","s":"PRD-43230","sb":"","p":5.5,"pp":5.5,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"كولومبي","b":"5766028764881","s":"PRD-95878","sb":"","p":16,"pp":16,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"كولومبي اخضر","b":"5895938755049","s":"PRD-29085","sb":"","p":12,"pp":12,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""},{"n":"معالق","b":"5853880331036","s":"PRD-84979","sb":"","p":1,"pp":1,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"معالق خشب","b":"5853756888805","s":"PRD-91090","sb":"","p":2,"pp":2,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"نستلة","b":"5852938272949","s":"PRD-57099","sb":"","p":2.08,"pp":2.08,"t":0,"c":"اكسبرس","u":"حبة","d":"","i":""},{"n":"نسكافيه","b":"5854132306721","s":"PRD-57095","sb":"","p":18,"pp":18,"t":0,"c":"اكسبرس","u":"KG","d":"","i":""},{"n":"نيشو 17","b":"5766117691485","s":"PRD-09914","sb":"","p":10,"pp":10,"t":0,"c":"معمل","u":"KG","d":"","i":""},{"n":"نيشو 17\/18 اخضر","b":"5765328395213","s":"PRD-26058","sb":"","p":8,"pp":8,"t":0,"c":"معمل اخضر","u":"KG","d":"","i":""}];
+var SCALE_ENABLED=0;
+var SCALE_PREFIX='29';
+var SCALE_CODE_LEN=5;
+var SCALE_DEC_PLACES=3;
+
+// Build lookup indexes
+var byBarcode={},bySku={},byScale=[];
+for(var i=0;i<PRODUCTS.length;i++){
+    var pr=PRODUCTS[i];
+    if(pr.b)byBarcode[pr.b]=pr;
+    if(pr.s)bySku[pr.s]=pr;
+    if(pr.sb)byScale.push(pr);
+}
+document.getElementById('productCount').textContent=PRODUCTS.length+' منتج متاح';
+
+var soundEnabled=true,html5QrCode=null,lastScannedCode='',lastScanTime=0,isLookingUp=false;
+var scannerConfig={fps:10,qrbox:{width:280,height:160},aspectRatio:1.5,formatsToSupport:[
+    Html5QrcodeSupportedFormats.EAN_13,Html5QrcodeSupportedFormats.EAN_8,
+    Html5QrcodeSupportedFormats.UPC_A,Html5QrcodeSupportedFormats.UPC_E,
+    Html5QrcodeSupportedFormats.CODE_128,Html5QrcodeSupportedFormats.CODE_39,
+    Html5QrcodeSupportedFormats.CODE_93,Html5QrcodeSupportedFormats.ITF,
+    Html5QrcodeSupportedFormats.QR_CODE
+]};
+
+window.requestCameraAndStart=async function(){
+    var statusEl=document.getElementById('cameraStatus');
+    var promptEl=document.getElementById('cameraPrompt');
+    statusEl.style.display='block';statusEl.style.color='#94a3b8';
+    statusEl.textContent='جاري طلب إذن الكاميرا...';
+    var cameraDeviceId=null;
+    try{
+        var stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}}});
+        var track=stream.getVideoTracks()[0];
+        if(track){var s=track.getSettings();cameraDeviceId=s.deviceId||null;}
+        stream.getTracks().forEach(function(t){t.stop()});
+    }catch(e){
+        statusEl.style.color='#ef4444';
+        if(e.name==='NotAllowedError')statusEl.textContent='تم رفض إذن الكاميرا. اسمح بالوصول من إعدادات المتصفح.';
+        else if(e.name==='NotFoundError')statusEl.textContent='لم يتم العثور على كاميرا. استخدم الإدخال اليدوي.';
+        else if(e.name==='NotReadableError')statusEl.textContent='الكاميرا مستخدمة من تطبيق آخر.';
+        else statusEl.textContent='خطأ: '+e.name+' — استخدم الإدخال اليدوي';
+        return;
+    }
+    statusEl.textContent='جاري التشغيل...';promptEl.style.display='none';
+    html5QrCode=new Html5Qrcode("reader");var started=false;
+    if(cameraDeviceId){try{await html5QrCode.start(cameraDeviceId,scannerConfig,onScanSuccess,function(){});started=true;}catch(e){try{await html5QrCode.clear();}catch(x){}html5QrCode=new Html5Qrcode("reader");}}
+    if(!started){try{await html5QrCode.start({facingMode:"environment"},scannerConfig,onScanSuccess,function(){});started=true;}catch(e){try{await html5QrCode.clear();}catch(x){}html5QrCode=new Html5Qrcode("reader");}}
+    if(!started){try{await html5QrCode.start({facingMode:"user"},scannerConfig,onScanSuccess,function(){});started=true;}catch(e){try{await html5QrCode.clear();}catch(x){}html5QrCode=new Html5Qrcode("reader");}}
+    if(!started){try{var cams=await Html5Qrcode.getCameras();for(var ci=0;ci<cams.length;ci++){try{await html5QrCode.start(cams[ci].id,scannerConfig,onScanSuccess,function(){});started=true;break;}catch(e){try{await html5QrCode.clear();}catch(x){}html5QrCode=new Html5Qrcode("reader");}}}catch(e){}}
+    if(!started){document.getElementById('reader').innerHTML='<div style="padding:40px;text-align:center;color:#94a3b8;"><i class="bi bi-camera-video-off" style="font-size:40px;display:block;margin-bottom:10px;"></i><p>فشل تشغيل الكاميرا</p><button onclick="location.reload()" style="margin-top:12px;background:#10b981;color:#fff;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-family:Tajawal,sans-serif;"><i class="bi bi-arrow-clockwise"></i> إعادة المحاولة</button></div>';}
+};
+
+function onScanSuccess(decodedText){
+    var now=Date.now();
+    if(decodedText===lastScannedCode&&now-lastScanTime<3000)return;
+    if(isLookingUp)return;
+    lastScannedCode=decodedText;lastScanTime=now;
+    playBeep();lookupProduct(decodedText);
+}
+window.lookupManual=function(){
+    var inp=document.getElementById('manualBarcode');
+    var code=inp.value.trim();if(!code)return;
+    playBeep();lookupProduct(code);inp.value='';
+};
+
+function lookupProduct(barcode){
+    if(isLookingUp)return;isLookingUp=true;
+    var product=null,scaleQty=null;
+    // Scale barcode check
+    if(SCALE_ENABLED&&barcode.length===13&&barcode.substring(0,2)===SCALE_PREFIX){
+        var productCode=barcode.substring(2,2+SCALE_CODE_LEN);
+        var valStart=2+SCALE_CODE_LEN;var valLen=13-2-SCALE_CODE_LEN-1;
+        var rawVal=barcode.substring(valStart,valStart+valLen);
+        scaleQty=parseFloat(rawVal)/Math.pow(10,SCALE_DEC_PLACES);
+        for(var j=0;j<byScale.length;j++){if(byScale[j].sb===productCode){product=byScale[j];break;}}
+    }
+    if(!product)product=byBarcode[barcode]||bySku[barcode]||null;
+    isLookingUp=false;
+    if(!product){showNotFound(barcode);return;}
+    showProduct(product,scaleQty);
+}
+
+var overlayTimer=null;
+function showOverlay(html,duration){
+    var ov=document.getElementById('productOverlay');
+    ov.innerHTML=html;ov.classList.remove('hidden');ov.classList.add('visible');
+    if(overlayTimer)clearTimeout(overlayTimer);
+    overlayTimer=setTimeout(function(){ov.classList.remove('visible');ov.classList.add('hidden');},duration||5000);
+}
+function showProduct(pr,scaleQty){
+    var price=pr.p;var scaleHtml='';
+    if(scaleQty!==null){
+        scaleHtml='<div class="overlay-scale-info"><span>الكمية: '+scaleQty.toFixed(3)+' '+(pr.u||'كغ')+'</span><span class="overlay-scale-total">المجموع: '+formatPrice(price*scaleQty)+' '+CURRENCY+'</span></div>';
+    }
+    var taxNote='';
+    if(pr.t>0)taxNote='<div class="overlay-tax-note">شامل الضريبة '+pr.t+'%</div>';
+    var imgHtml='';
+    if(pr.i)imgHtml='<div style="text-align:center;margin-bottom:10px;"><img src="'+pr.i+'" style="max-height:100px;max-width:100%;border-radius:10px;object-fit:contain;" alt=""></div>';
+    showOverlay('<div class="overlay-card">'+imgHtml+'<div class="overlay-product-name">'+escapeHtml(pr.n)+'</div>'+(pr.c?'<div class="overlay-category"><i class="bi bi-tag"></i> '+escapeHtml(pr.c)+'</div>':'')+'<div class="overlay-price-row"><div class="overlay-price-label">السعر</div><div class="overlay-price-value">'+formatPrice(price)+' '+CURRENCY+'</div></div>'+taxNote+scaleHtml+'</div>',6000);
+}
+function showNotFound(barcode){
+    showOverlay('<div class="overlay-not-found"><i class="bi bi-x-circle"></i><h3>منتج غير موجود</h3><p>الباركود: <span dir="ltr">'+escapeHtml(barcode)+'</span></p></div>',3000);
+}
+function formatPrice(num){return parseFloat(num).toLocaleString('en-US',{minimumFractionDigits:DECIMALS,maximumFractionDigits:DECIMALS});}
+function escapeHtml(str){var d=document.createElement('div');d.textContent=str;return d.innerHTML;}
+window.toggleSound=function(){
+    soundEnabled=!soundEnabled;var btn=document.getElementById('soundToggle');
+    btn.classList.toggle('active',soundEnabled);
+    btn.innerHTML=soundEnabled?'<i class="bi bi-volume-up-fill"></i>':'<i class="bi bi-volume-mute-fill"></i>';
+};
+function playBeep(){
+    if(!soundEnabled)return;
+    try{var ctx=new(window.AudioContext||window.webkitAudioContext)();var o=ctx.createOscillator();var g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=1200;o.type='sine';g.gain.value=0.3;o.start();o.stop(ctx.currentTime+0.1);}catch(e){}
+}
+})();
+</script>
+</body>
+</html>
